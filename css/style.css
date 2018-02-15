@@ -119,10 +119,6 @@ body {
     color: lightgray;
 }
 
-.todo .table {
-    position: relative;
-}
-
 .todo td {
     border: 1px solid #a30119;
     text-align: left;
@@ -136,8 +132,6 @@ label {
 }
 
 select {
-    position: absolute;
-    left:235px;
     background-color: #8aa4f2;
     font-family: "Permanent Marker";
     color: #434344;
