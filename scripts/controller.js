@@ -70,6 +70,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		for(var i=0; i<$scope.todos.length; i++) {
 			if($scope.todos[i].title == title) {
 				$scope.todos[i].edit = true;
+				$scope.todos[i].lastUpdated = new Date();
 			}
 		}
 	};
@@ -130,12 +131,16 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		$scope.submission['visible'] = true;
 		$scope.submission['class'] = '';
 
-		var todos = JSON.parse(localStorage.getItem('todos'));
-		todos.push($scope.submission);
-		localStorage.setItem('todos', JSON.stringify(todos));	
-		alert('Task Submitted!');
-		$scope.submission.title = undefined;
-		$scope.submission.due = undefined;
-		$scope.submission.notes = undefined;
+		if($scope.submission.due < $scope.submission.posted) {
+			alert('Invalid Due Date!')
+		} else {
+			var todos = JSON.parse(localStorage.getItem('todos'));
+			todos.push($scope.submission);
+			localStorage.setItem('todos', JSON.stringify(todos));	
+			alert('Task Submitted!');
+			$scope.submission.title = undefined;
+			$scope.submission.due = undefined;
+			$scope.submission.notes = undefined;
+		}
 	};
 }]);

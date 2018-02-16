@@ -41,7 +41,7 @@
 							<td ng-if="todo.visible"><textarea ng-model="todo.title" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><textarea ng-model="todo.notes" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><textarea ng-model="todo.posted" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
-							<td ng-if="todo.visible"><textarea ng-model="todo.lastUpdated" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
+							<td ng-if="todo.visible"><textarea ng-model="todo.lastUpdated" disabled="disabled" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><textarea ng-model="todo.due" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><input type="checkbox" ng-model="todo.completed" ng-click="check()" style="display:block; margin:auto;" ng-change="updateStorage()"></td>
 							<td ng-if="todo.visible"><button ng-click="edit(todo.title)" class="marker">Edit</button></td>
