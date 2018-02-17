@@ -37,7 +37,7 @@
 							<th>Edit</th>
 							<th>Delete</th>
 						</tr>
-						<tr ng-repeat="todo in todos track by $index">
+						<tr ng-repeat="todo in todos | orderObjectBy:sortBy:true track by $index">
 							<td ng-if="todo.visible"><textarea ng-model="todo.title" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><textarea ng-model="todo.notes" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><textarea ng-model="todo.posted" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
@@ -53,6 +53,13 @@
 									<option value="Show All">Show All</option>
 									<option value="Show Completed">Show Completed</option>
 									<option value="Show To Do">Show To Do</option>
+								</select>
+							</td>
+							<td>
+								<select ng-model="sortBy" ng-change="sort()">
+									<option value="posted">Posted</option>
+									<option value="lastUpdated">Last Updated</option>
+									<option value="due">Due</option>
 								</select>
 							</td>
 						</tr>

@@ -1,5 +1,18 @@
 
 var app = angular.module('app', []);
+app.filter('orderObjectBy', function() {
+	return function(items, field, reverse) {
+		var filtered = [];
+		angular.forEach(items, function(item) {
+			filtered.push(item);
+		});
+		filtered.sort(function (a, b) {
+			return (a[field] > b[field] ? 1 : -1);
+		});
+		if(reverse) filtered.reverse();
+		return filtered;
+	};
+});
 app.controller('MainController', ['$scope', '$window', function($scope, $window) {
 	$scope.courses = [
 		{ number: 'CMPS109', title: 'Advanced Programming', dept: 'Computer Science', quarter: 'Fall' },
@@ -15,31 +28,31 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 			console.log('inside if');
 			var todos =  [
 				{
-					title: 'Make a profile for Peter Parker',
-					notes: 'These are notes about the profile',
-					posted: '2/11/18',
-					lastUpdated: '2/12/18',
-					due: '2/15/18',
-					completed: true,
+					title: 'Make a to do list for Peter Parker',
+					notes: 'These are notes about the to do list',
+					posted: new Date('2/11/18'),
+					lastUpdated: new Date('2/12/18'),
+					due: new Date('2/16/18'),
+					completed: false,
 					edit: false,
 					visible: true
 				},
 				{
-					title: 'Make a to do list for Peter Parker',
-					notes: 'These are notes about the to do list',
-					posted: '2/11/18',
-					lastUpdated: '2/12/18',
-					due: '2/16/18',
-					completed: false,
+					title: 'Make a profile for Peter Parker',
+					notes: 'These are notes about the profile',
+					posted: new Date('2/12/18'),
+					lastUpdated: new Date('2/12/18'),
+					due: new Date('2/15/18'),
+					completed: true,
 					edit: false,
 					visible: true
 				},
 				{
 					title: 'Make a to do form for Peter Parker',
 					notes: 'These are notes about the to do form',
-					posted: '2/11/18',
-					lastUpdated: '2/12/18',
-					due: '12/17/18',
+					posted: new Date('2/11/18'),
+					lastUpdated: new Date('2/12/18'),
+					due: new Date('12/17/18'),
 					completed: false,
 					edit: false,
 					visible: true
@@ -47,9 +60,9 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 				{
 					title: 'Turn in this assignment',
 					notes: 'This is the assignment to turn in',
-					posted: '2/11/18',
-					lastUpdated: '2/12/18',
-					due: '12/18/18',
+					posted: new Date('2/9/18'),
+					lastUpdated: new Date('2/10/18'),
+					due: new Date('12/15/18'),
 					completed: false,
 					edit: false,
 					visible: true
@@ -59,6 +72,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		}
 		$scope.todos = JSON.parse(localStorage.getItem('todos'));
 		$scope.filter = 'Show All';
+		$scope.sortBy = 'due';
 		$scope.filterTable();
 	};
 
@@ -113,7 +127,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 				}
 			}
 		}
-	}
+	};
 
 	$scope.initForm = function() {
 		$scope.submission = {
