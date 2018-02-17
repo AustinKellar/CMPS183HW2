@@ -10,7 +10,7 @@
 	<body ng-controller="MainController">
 		<div class="row">
 			<header class="marker">
-				<h1>CMPS 183: Homework 1</h1>
+				<h1>CMPS 183: Homework 2</h1>
 			</header>
 		</div>
 		<div class="row">
@@ -37,29 +37,29 @@
 							<th>Edit</th>
 							<th>Delete</th>
 						</tr>
-						<tr ng-repeat="todo in todos | orderObjectBy:sortBy:true track by $index">
+						<tr ng-repeat="todo in todos | orderObjectBy:orderBy:false track by $index">
 							<td ng-if="todo.visible"><textarea ng-model="todo.title" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><textarea ng-model="todo.notes" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><textarea ng-model="todo.posted" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><textarea ng-model="todo.lastUpdated" disabled="disabled" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><textarea ng-model="todo.due" ng-disabled="!todo.edit" ng-change="updateStorage()"></textarea></td>
 							<td ng-if="todo.visible"><input type="checkbox" ng-model="todo.completed" ng-click="check()" style="display:block; margin:auto;" ng-change="updateStorage()"></td>
-							<td ng-if="todo.visible"><button ng-click="edit(todo.title)" class="marker">Edit</button></td>
+							<td ng-if="todo.visible"><button ng-click="edit(todo.title, todo.buttonText)" class="marker">{{todo.buttonText}}</button></td>
 							<td ng-if="todo.visible"><button ng-click="delete(todo.title)" class="marker">Delete</button></td>
 						</tr>
 						<tr>
 							<td>
 								<select ng-model="filter" ng-change="filterTable()">
-									<option value="Show All">Show All</option>
-									<option value="Show Completed">Show Completed</option>
-									<option value="Show To Do">Show To Do</option>
+									<option value="Show All">Show: All</option>
+									<option value="Show Completed">Show: Completed</option>
+									<option value="Show To Do">Show: To Do</option>
 								</select>
 							</td>
 							<td>
-								<select ng-model="sortBy" ng-change="sort()">
-									<option value="posted">Posted</option>
-									<option value="lastUpdated">Last Updated</option>
-									<option value="due">Due</option>
+								<select ng-model="sortBy" ng-change="changeSort()">
+									<option value="posted">Sort By: Posted</option>
+									<option value="lastUpdated">Sort By: Last Updated</option>
+									<option value="due">Sort By: Due</option>
 								</select>
 							</td>
 						</tr>

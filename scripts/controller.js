@@ -7,7 +7,7 @@ app.filter('orderObjectBy', function() {
 			filtered.push(item);
 		});
 		filtered.sort(function (a, b) {
-			return (a[field] > b[field] ? 1 : -1);
+			return (new Date(a[field]) > new Date(b[field]) ? 1 : -1);
 		});
 		if(reverse) filtered.reverse();
 		return filtered;
@@ -35,6 +35,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 					due: new Date('2/16/18'),
 					completed: false,
 					edit: false,
+					buttonText: 'Edit',
 					visible: true
 				},
 				{
@@ -45,6 +46,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 					due: new Date('2/15/18'),
 					completed: true,
 					edit: false,
+					buttonText: 'Edit',
 					visible: true
 				},
 				{
@@ -55,6 +57,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 					due: new Date('12/17/18'),
 					completed: false,
 					edit: false,
+					buttonText: 'Edit',
 					visible: true
 				},
 				{
@@ -65,6 +68,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 					due: new Date('12/15/18'),
 					completed: false,
 					edit: false,
+					buttonText: 'Edit',
 					visible: true
 				}
 			];
@@ -73,19 +77,49 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		$scope.todos = JSON.parse(localStorage.getItem('todos'));
 		$scope.filter = 'Show All';
 		$scope.sortBy = 'due';
+		$scope.orderBy = $scope.sortBy;
 		$scope.filterTable();
+		$scope.editing = false;
 	};
 
 	$scope.updateStorage = function() {
 		localStorage.setItem('todos', JSON.stringify($scope.todos));
 	};
 
-	$scope.edit = function(title) {
-		for(var i=0; i<$scope.todos.length; i++) {
-			if($scope.todos[i].title == title) {
-				$scope.todos[i].edit = true;
-				$scope.todos[i].lastUpdated = new Date();
+	$scope.changeSort = function() {
+		var temp = $scope.sortBy;
+		if($scope.editing) {
+			alert('Cannot sort while editing!')
+		} else {
+			$scope.orderBy = $scope.sortBy;
+		}
+	};
+
+	$scope.edit = function(title, type) {
+		if(!$scope.editing && type == 'Edit') {
+			$scope.editing = true;
+			for(var i=0; i<$scope.todos.length; i++) {
+				if($scope.todos[i].title == title) {
+					$scope.orderBy = '';
+					var temp = $scope.todos[0];
+					$scope.todos[0] = $scope.todos[i];
+					$scope.todos[i] = temp;
+					$scope.todos[0].edit = true;
+					$scope.todos[0].lastUpdated = new Date();
+					$scope.todos[0].buttonText = 'Save';
+				}
 			}
+		} else if(type == 'Save') {
+			$scope.editing = false;
+			for(var i=0; i<$scope.todos.length; i++) {
+				if($scope.todos[i].title == title) {
+					$scope.todos[i].edit = false;
+					$scope.todos[i].buttonText = 'Edit';
+					$scope.orderBy = $scope.sortBy;
+				}
+			}
+		} else {
+			alert('You can only edit 1 row at a time!');
 		}
 	};
 
@@ -96,6 +130,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 				break;
 			}
 		}
+		$scope.editing = false;
 		$scope.updateStorage();
 	};
 
@@ -138,23 +173,31 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 	}
 
 	$scope.submitTask = function() {
-		$scope.submission['posted'] = new Date();
-		$scope.submission['lastUpdated'] = new Date();
-		$scope.submission['completed'] = false;
-		$scope.submission['edit'] = false;
-		$scope.submission['visible'] = true;
-		$scope.submission['class'] = '';
-
-		if($scope.submission.due < $scope.submission.posted) {
-			alert('Invalid Due Date!')
+		if($scope.submission.title == undefined || $scope.submission.due == undefined || $scope.submission.notes == undefined) {
+			alert('You must fill out all fields before submitting!');
 		} else {
-			var todos = JSON.parse(localStorage.getItem('todos'));
-			todos.push($scope.submission);
-			localStorage.setItem('todos', JSON.stringify(todos));	
-			alert('Task Submitted!');
-			$scope.submission.title = undefined;
-			$scope.submission.due = undefined;
-			$scope.submission.notes = undefined;
+			$scope.submission['posted'] = new Date();
+			$scope.submission['lastUpdated'] = new Date();
+			$scope.submission['completed'] = false;
+			$scope.submission['edit'] = false;
+			$scope.submission['visible'] = true;
+			$scope.submission['class'] = '';
+			$scope.submission['buttonText'] = 'Edit';
+
+			if($scope.submission.due < $scope.submission.posted) {
+				alert('The due date cannot be before tomorrow\'s date!')
+			} else {
+				var todos = JSON.parse(localStorage.getItem('todos'));
+				todos.push($scope.submission);
+				localStorage.setItem('todos', JSON.stringify(todos));	
+				alert('Task Submitted!');
+				$scope.submission.title = undefined;
+				$scope.submission.due = undefined;
+				$scope.submission.notes = undefined;
+				var host = $window.location.host;
+		        var landingUrl = "todo.html";
+		        $window.location.href = landingUrl;
+			}
 		}
 	};
 }]);
