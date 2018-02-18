@@ -150,10 +150,6 @@ textarea, input[type=date] {
     resize: none;
 }
 
-input[type=radio] {
-
-}
-
 .todo textarea:disabled {
     background-color: #8aa4f2;
     border: none;
@@ -179,6 +175,14 @@ button {
     background-color: #5975f2;
     padding-top: 20px;
     height: 100%;
+}
+
+a {
+    color: #ba0505;
+}
+
+a:hover {
+    color: #7c0303;
 }
 
 .footer-navbar ul {
